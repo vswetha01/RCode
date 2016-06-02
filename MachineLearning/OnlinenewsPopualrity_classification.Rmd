@@ -1,0 +1,323 @@
+---
+title: "MachineLearning Hw3"
+author: "Swetha Reddy"
+date: "November 24, 2015"
+output: html_document
+---
+**Question1**
+For each of the methods, carefully describe how you choose any thresholds or tuning parameters. 
+Use appropriate plots and documentation to describe your results. Feel free to remove variables or perform dimension reduction if you think it will help your predictions. I am being intentionally vague here because I want to see how you would handle such a data set in practice.
+**Reading the data**
+Reading the data and finding the correlation between response and predictors. 
+```{r, echo=TRUE}
+getwd()
+setwd("/MSAN_USF/courses_fall/621-MachineLearning/homework3")
+news.data <-  read.csv("OnlineNewsPopularityTraining.csv", header=TRUE)
+news.data.test <- read.csv("OnlineNewsPopularityTest.csv", header=TRUE)
+nrow(news.data)
+nd <- subset(news.data, , -c(1,2, 61))
+nd.t <- subset(news.data.test,,-c(1,2, 61))
+cor(nd)[,59]
+```
+The maximum possible correlation with the response is 
+0.1819855 for predictor = 'kw_avg_avg'.
+
+
+Logistic Regression
+===========================================
+Performing classification using the Logistic regression. For dimension reduction using the regsbsets with backward stepwise. I am choosing BIC (Baysian Information Criteria).
+
+```{r, echo=TRUE}
+
+library(leaps)
+reg.fit <- regsubsets(popular~., data=nd, nvmax = 58, method = "backward")
+reg.sum <- summary(reg.fit)
+reg.sum$bic
+```
+
+Choosing the subset with minimum bic = 2049.065 and also looking at model parsimony. Choose model with 24 predictors from 58.
+
+```{r, echo=TRUE}
+nm <- names(reg.sum$which[24,])[reg.sum$which[24,][] == TRUE]
+nm1 <- nm[-1]
+s1 <- paste(nm1, collapse ='+')
+mod.str <- paste("popular","~",s1)
+
+glm4 <- glm(mod.str, data=nd, family = binomial)
+#summary(glm4)
+library(car)
+vif(glm4)
+
+```
+
+The chosen predictors are significant. Using the vif test checked for colinearity of the model. Noticed there is high collinearity between predictors hence getting rid of **kw_max_avg, kw_avg_avg **. I also tried ridge, Lasso and Elastic net, dimension reduction rechniques. The sensitivity and specificity, accuracy are almost the same. The final model selected is 
+
+```{r, echo=FALSE}
+mod.str <- "popular ~ n_tokens_content+num_hrefs+num_self_hrefs+average_token_length+num_keywords+data_channel_is_lifestyle+data_channel_is_entertainment+data_channel_is_bus+data_channel_is_world+kw_avg_max+kw_min_avg+self_reference_avg_sharess+weekday_is_monday+weekday_is_tuesday+weekday_is_wednesday+weekday_is_thursday+weekday_is_friday+LDA_01+LDA_02+LDA_03+LDA_04+global_subjectivity"
+print (mod.str)
+```
+
+The Calculating the model accuracy for training data and test data.
+
+```{r, echo = TRUE}
+glm.probs<- NULL
+glm.probs <- predict(glm4, type = "response")
+d1 <- length(glm.probs)
+glm.pred.train <- rep(0, d1)
+glm.pred.train[glm.probs > 0.2] = 1
+table(glm.pred.train, nd$popular)
+acc.tr = mean(glm.pred.train == nd$popular)
+# print(c("Accuracy Training:", acc.tr,"Specificity:", #acc.tr,"Sensitivity:", acc.tr))
+d2 <- length(nd.t$popular)
+glm.pred.test <- rep(0, d2)
+#Fit the model on the Test data
+glm.probs <- predict(glm4, nd.t, type = "response")
+glm.pred.test[glm.probs > 0.2] = 1
+t1 <- table(glm.pred.test, nd.t$popular)
+print("Logistic Regression Confusion Matrix:")
+t1
+#Specificty
+glm.speci <- t1[1,][1]/(t1[1,][1]+t1[1,][2])
+#sensitivity
+glm.sensi <- t1[2,][2]/(t1[2,][2]+t1[2,][1])
+```
+
+
+```{r, echo = FALSE}
+#Accuracy on the Test Set
+glm.acc <- mean(glm.pred.test == nd.t$popular)
+print(c("Accuracy Train:",acc.tr,
+        "Accuracy Test:",glm.acc,
+        "Specificity:",glm.speci,
+        "Sensitivity:",glm.sensi))
+```
+For this classifier, logistic regression accuracy > 50%, better than random guessing. However the specificity is also high. The sensitivity is close to 32%. Hence logistic regression may not be the correct algorithm to classify for this dataset. The threshold chosesn here is 20%. If I increase the threshold to 50%, then the accuracy improves, but sensitivity goes down.
+
+Linear Discriminant Analysis(LDA)
+===========================================
+Checking for Normality using the histograms of the qunatitative predictors. Plotting the histograms of the predictors
+```{r, echo = TRUE}
+library(MASS)
+par(mfrow = c(2,2))
+hist(nd$self_reference_avg_sharess[nd$popular == 1], n = 100, main = "shares | 1", xlab = "")
+hist(nd$self_reference_avg_sharess[nd$popular == 0], n = 100, main = "shares | 0", xlab = "")
+
+hist(nd$LDA_01[nd$popular == 1], n = 100, main = "LDA_01 | 1", xlab = "")
+hist(nd$LDA_01[nd.t$popular == 0], n = 100, main = "LDA_01 | 0", xlab = "")
+
+```
+
+```{r, echo = TRUE}
+par(mfrow = c(3,2))
+hist(nd$LDA_02[nd$popular == 1], n = 100, main = "LDA_02 | 1", xlab = "")
+hist(nd$LDA_02[nd$popular == 0], n = 100, main = "LDA_02 | 0", xlab = "")
+
+hist(nd$LDA_03[nd$popular == 1], n = 100, main = "LDA_03 | 1", xlab = "")
+hist(nd$LDA_03[nd$popular == 0], n = 100, main = "LDA_03 | 0", xlab = "")
+
+hist(nd$LDA_04[nd$popular == 1], n = 100, main = "LDA_04 | 1", xlab = "")
+hist(nd$LDA_04[nd$popular == 0], n = 100, main = "LDA_04 | 0", xlab = "")
+```
+The histograms of the distribution of the quantitative predictors is not Normal. Hence the basic assumption for LDA is not satisfied. The data is very skewed to right. Now we try to fit the LDA model on the previously chosen parameters. The plot of the fit summarised here.
+```{r, echo = TRUE}
+lda.fit1 <- lda(popular ~ n_tokens_content+num_hrefs+num_self_hrefs+average_token_length+num_keywords+data_channel_is_lifestyle+data_channel_is_entertainment+data_channel_is_bus+data_channel_is_world+kw_avg_max+kw_min_avg+self_reference_avg_sharess+weekday_is_monday+weekday_is_tuesday+weekday_is_wednesday+weekday_is_thursday+weekday_is_friday+LDA_01+LDA_02+LDA_03+LDA_04+global_subjectivity, data=nd)
+
+#lda.fit1
+plot(lda.fit1)
+```
+The results of LDA are not correct since the normal distribution is not satisfied. However cheking 
+```{r, echo = TRUE}
+lda.pred <- predict(lda.fit1, nd.t)
+
+lda.class <- lda.pred$class
+sum(lda.pred$posterior[,1] <= 0.2)
+length(lda.class)
+tb <- table(lda.class, nd.t$popular)
+print("LDA Confusion Matrix:")
+tb
+lda.acc <- mean(lda.class == nd.t$popular)
+
+lda.speci <- tb[1,][1]/(tb[1,][1]+tb[1,][2])
+#sensitivity tn/(tn+fp)
+lda.sensi <- tb[2,][2]/(tb[2,][2]+tb[2,][1])
+```
+Performing Model assessment, the accuracy, sensitivity, specificity are below.
+
+```{r, echo = FALSE}
+print(c("LDA Test set Accuracy:",lda.acc))
+print(c("LDA Test set Specificity:",lda.speci))
+print(c("LDA Test set Sensitivity:",lda.sensi))
+```
+The accuracy of LDA is better than logistic regression model, but the Sensitivity corresponding to Type I error, is bad  is a slight change in specificity and sensitivity.
+
+Quadratic Discriminant Analysis(QDA)
+===========================================
+Performing quadratic discrimination analysis on the classifer data. The plot of the 
+```{r, echo = TRUE}
+qda.fit <- qda(popular ~ n_tokens_content+num_hrefs+num_self_hrefs +     
+                  average_token_length+num_keywords+
+                  data_channel_is_lifestyle+data_channel_is_entertainment+
+                  data_channel_is_bus+data_channel_is_world+kw_min_avg+
+                  self_reference_avg_sharess+weekday_is_monday+
+                  weekday_is_tuesday+weekday_is_wednesday+
+                  weekday_is_thursday+weekday_is_friday+
+                  LDA_01+LDA_02+LDA_03+LDA_04+global_subjectivity, 
+               data = nd)
+
+#look at summary of fit
+qda.fit
+
+```
+The test set accuracy, specificity and sensitivity are summarised below.
+
+```{r, echo = TRUE}
+
+#predict the market Direction in 2005
+qda.class <- predict(qda.fit, nd.t)$class
+
+#look at the confusion matrix
+qd.tb <- table(qda.class, nd.t$popular)
+mean(qda.class == nd.t$popular)
+print("QDA Confusion Matrix:")
+
+qda.acc <- mean(qda.class == nd.t$popular)
+
+#Specificty
+qda.speci <- qd.tb[1,][1]/(qd.tb[1,][1]+qd.tb[1,][2])
+#sensitivity
+qda.sensi <- qd.tb[2,][2]/(qd.tb[2,][2]+qd.tb[2,][1])
+
+
+```
+
+```{r, echo = FALSE}
+print(c("QDA Test set Accuracy:",qda.acc))
+print(c("QDA Test set Specificity:",qda.speci))
+print(c("QDA Test set Sensitivity:",qda.sensi))
+```
+
+The model has accuracy on the test set is 0.74 less than the LDA model, which implies that the line of separation is linear. Also the prior probability of P(0) = 0.797074, the classifier is not performing well.
+
+K-Nearest Neighbors(KNN)
+===========================================
+Using KNN performing classification.
+
+```{r, echo = TRUE}
+library(class)
+train.X <-nd[,-59]
+test.X <- nd.t[,-59]
+train.popular <- nd$popular
+
+set.seed(1) #for reproducability for the randomly breaking of ties
+knn.pred <- knn(train.X, test.X, train.popular, k = 1)
+#knn.pred <- knn(train.X, test.X, train.popular, k = 9)
+#knn.pred <- knn(train.X, test.X, train.popular, k = 11)
+# knn.pred <- knn(train.X, test.X, train.popular, k = 19)
+
+#9 got 78.43
+#11 0.7868315
+#19 0.7912462
+
+```
+Calculating the accuracy and sensitivity and specificity of the model.
+
+```{r, echo = TRUE}
+#look at the confusion matrix
+kn.tb <- table(knn.pred, nd.t$popular)
+knn.acc <- mean(knn.pred == nd.t$popular)
+
+#Specificty
+knn.speci <- kn.tb[1,][1]/(kn.tb[1,][1]+kn.tb[1,][2])
+#sensitivity
+knn.sensi <- kn.tb[2,][2]/(kn.tb[2,][2]+kn.tb[2,][1])
+
+```
+
+```{r, echo = FALSE}
+print(c("KNN Test set Accuracy:",knn.acc))
+print(c("KNN Test set Specificity:",knn.speci))
+print(c("KNN Test set Sensitivity:",knn.sensi))
+```
+The Accuracy of this model when K=1 is 0.70686.  WIth K=1, does better than random guessing. Doing the same thing for higher K.
+Fitting a couple of model's using KNN, for different values of K. I tried k= 1,9,11, 19 and got 
+K= 1 70.68%
+K= 9 78.43%
+K= 11 78.68%
+K= 19 79.112%
+Hence choosing K = 19. Also I increased K to sqrt(n) = 178, the accuracy did not improve much. Thus selecting K = 19. When K=1 the accuracy is high and sensitivity is also high.
+```{r, echo = FALSE}
+set.seed(1) #for reproducability for the randomly breaking of ties
+knn.pred <- knn(train.X, test.X, train.popular, k = 19)
+```
+
+```{r, echo = TRUE}
+#look at the confusion matrix
+kn.tb <- table(knn.pred, nd.t$popular)
+knn.acc <- mean(knn.pred == nd.t$popular)
+#Specificty
+knn.speci <- kn.tb[1,][1]/(kn.tb[1,][1]+kn.tb[1,][2])
+#sensitivity
+knn.sensi <- kn.tb[2,][2]/(kn.tb[2,][2]+kn.tb[2,][1])
+
+```
+
+```{r, echo = FALSE}
+print(c("KNN Test set Accuracy:",knn.acc))
+print(c("KNN Test set Specificity:",knn.speci))
+print(c("KNN Test set Sensitivity:",knn.sensi))
+```
+With high K= 19 the accuracy improved but the sensitivity of the model is 0.027, very low. But the specificity has improved to 0.99. The 
+Naive Bayes (NB)
+===========================================
+Using NB performing classification.
+```{r, echo = TRUE, message=FALSE, warning=FALSE}
+
+#install.packages('klaR', repos ='http://cran.us.r-project.org')
+library(klaR)
+train.X <-nd[,-59]
+test.X <- nd.t[,-59]
+train.popular <- nd$popular
+nb.mod <- NaiveBayes(train.X, as.factor(train.popular))
+nb.pred <- predict(nb.mod, test.X, threshold = 0.5)
+
+nb.tb <- table(nb.pred$class, nd.t$popular)
+nb.acc <- mean(nb.pred$class == nd.t$popular)
+
+nb.speci <- nb.tb[1,][1]/(nb.tb[1,][1]+nb.tb[1,][2])
+#sensitivity tn/(tn+fp)
+nb.sensi <- nb.tb[2,][2]/(nb.tb[2,][2]+nb.tb[2,][1])
+```
+
+```{r, echo = FALSE}
+print(c("NaiveBayes Test set Accuracy:",nb.acc))
+print(c("Naive Bayes Test set Specificity:",nb.speci))
+print(c("Naive Bayes Test set Sensitivity:",nb.sensi))
+```
+
+
+
+```{r, echo = TRUE}
+
+name <- c("logistic", "LDA", "QDA", "KNN", "NaiveBayes")
+accuracy <- c(glm.acc,lda.acc,qda.acc,knn.acc,nb.acc)
+
+specificity <- c(glm.speci,lda.speci,qda.speci,knn.speci,nb.speci)
+sensitivity <- c(glm.sensi, lda.sensi, qda.sensi, knn.sensi, nb.sensi)
+df.mod <- data.frame(name, accuracy, specificity, sensitivity)
+df.mod
+```
+
+
+
+```{r, echo = FALSE}
+# scores.lda <- out.lda$posterior[,2]
+# scores.knn <- attr(class.knn,"prob")
+# scores.knn <- attr(class.knn,"prob")
+# knn.pred
+```
+
+
+
+```{r, echo = FALSE}
+# scores.lda <- knn.pred$posterior[,2]
+```
