@@ -1,0 +1,80 @@
+popularity,rank,Appliance,Min.Level,Ing.Time,Highest.ing..time,Ing.Usage..total.,Cooking.Time,Income.CLEAN,Learn.Time,Ing..1,Ing.2.,Ing..3,Ing..4
+395,1,Diner Stove,1,5,5,2,30,9,0,Egg,,,
+395,2,Diner Stove,1,35,30,4,90,25,0,Bread,Egg,,
+386,3,Diner Stove,2,90,60,4,120,40,60,Bread,Cheese,,
+364,4,Diner Stove,5,1560,1200,8,1800,240,300,Pasta,Chicken,Cheese,
+354,5,Commercial Range,6,7205,7200,5,3600,255,60,Beef,Egg,,
+337,6,Commercial Range,8,7620,7200,6,360,180,1800,Pasta,Beef,Tomato,
+377,7,Diner Stove,3,7230,7200,3,360,80,180,Bread,Beef,,
+321,8,Commercial Range,10,18000,14400,5,3600,660,3600,Potato,Cream,,
+313,9,Commercial Range,11,23400,14400,11,14400,1600,32400,Beef,Carrot,Potato,
+312,10,Commercial Range,11,3300,1800,7,1200,360,10800,Chicken,Pasta,Carrot,
+297,11,Diner Oven,13,10800,7200,8,1800,630,43200,Flour,Carrot,Sugar,
+297,12,Diner Oven,13,9005,7200,3,240,150,1200,Flour,Egg,Sugar,
+280,13,Diner Stove,15,7325,7200,7,1800,480,28800,Egg,Tomato,Broccoli,
+281,14,Diner Oven,15,8460,7200,9,5400,900,18000,Chicken,Cheese,Broccoli,
+272,15,Diner Oven,16,19865,18000,8,3600,880,10800,Flour,Egg,Green Pepper,Cheese
+265,16,Commercial Range,17,54000,28800,6,7200,1400,36000,Beef,Green Pepper,Onion,
+249,17,Diner Oven,19,25200,14400,7,7200,1440,21600,Potato,Bacon,Broccoli,
+248,18,Diner Oven,19,5460,3600,9,1200,600,43200,Flour,Cheese,Bacon,
+248,19,Commercial Range,19,7205,3600,7,600,350,32400,Egg,Bacon,Cream,
+184,20,Salad Bar,27,1505,1200,9,600,350,14400,Lettuce,Chicken,Egg,
+232,21,Deli Counter,21,4050,3600,8,1800,600,28800,Bread,Bacon,Lettuce,Tomato
+185,22,Salad Bar,27,32520,28800,6,3600,1200,23400,Cucumber,Tomato,Onion,
+217,23,Deli Counter,23,21930,18000,9,2400,900,12600,Bread,Cucumber,Lettuce,Mayonnaise
+201,24,Deli Counter,25,57750,28800,4,5400,960,21600,Bread,Salmon,Tomato,Onion
+201,25,Commercial Oven,25,37800,28800,6,7200,1680,28800,Salmon,Carrot,Broccoli,
+202,26,Commercial Oven,25,19860,18000,9,3600,1200,68400,Green Pepper,Cheese,Tuna,
+200,27,Deli Counter,25,19830,18000,6,3600,1100,14400,Bread,Tuna,Mayonnaise,
+186,28,Salad Bar,27,57600,28800,7,7200,2100,82800,Rice,Salmon,Ginger,
+169,29,Salad Bar,27,19800,10800,6,1200,780,3600,Rice,Seaweed,Cucumber,Carrot
+176,30,Salad Bar,27,34200,18000,7,1800,1100,69600,Rice,Seaweed,Tuna,Ginger
+176,31,Commercial Oven,28,36000,14400,5,1800,1350,96000,Beef,Tomato Sauce,Peas,
+153,32,Commercial Oven,31,73800,57600,9,14400,3400,43200,Tuna,Mushroom,Peas,
+152,33,Commercial Oven,31,106200,57600,5,900,870,24000,Flour,Mushroom,Green Pepper,Onion
+136,34,Commercial Oven,31,75660,57600,6,2700,1500,28800,Mushroom,Cheese,Green Pepper,
+160,35,Commercial Oven,25,5580,3600,6,600,390,2400,Flour,Tomato,Cheese,Basil
+136,36,Chateau Stove,33,72000,57600,7,3600,1800,39600,Rice,Mushroom,Cream,
+137,37,Chateau Stove,33,19800,14400,6,5400,1700,5400,Peas,Carrot,Garlic,
+380,38,Diner Stove,3,360,300,3,300,60,300,Pasta,Cheese,,
+122,39,Deli Counter,35,136830,79200,5,10800,2800,45000,Bread,Lobster,Butter,
+113,40,Chateau Stove,35,151200,79200,5,21600,5100,57600,Lobster,Tomato Sauce,Butter,
+104,41,Commercial Oven,37,70200,57600,8,1800,1320,3600,Flour,Apple,Sugar,Butter
+96,42,Deli Counter,21,3750,3600,6,1200,660,12600,Bread,Tomato,Basil,
+80,43,Chateau Stove,37,22800,18000,6,1800,1000,28800,Chicken,Apple,Ginger,
+65,44,Drink Maker,42,5700,3600,6,3600,1470,12600,Lettuce,Carrot,Apple,
+65,45,Drink Maker,42,25200,18000,4,18000,4050,39600,Ginger,Lemon,,
+64,46,Drink Maker,42,14400,14400,1,600,480,28800,Orange,,,
+48,47,Ice Cream,63,118800,108000,6,1800,1350,82800,Sugar,Milk,Vanilla,
+49,48,Chateau Oven,44,118805,108000,8,10800,3300,108000,Egg,Sugar,Cream,Vanilla
+41,49,Drink Maker,42,18000,14400,4,5400,2000,34200,Apple,Orange,,
+43,50,Chateau Oven,44,27000,18000,5,7200,2400,50400,Ginger,Flour,Sugar,
+35,51,Salad Bar,46,86700,72000,7,10800,3600,39600,Lettuce,Orange,Celery,
+32,52,Salad Bar,46,91500,72000,7,3600,1850,900,Chicken,Mayonnaise,Lettuce,Celery
+26,53,Drink Maker,47,25200,21600,4,7200,2700,2400,Strawberry,Milk,,
+25,54,Chateau Oven,47,27000,21600,7,1800,1500,50400,Flour,Strawberry,Cream,
+8,55,Drink Maker,47,36000,21600,5,2400,1550,61200,Strawberry,Lemon,Sugar,
+347,56,Commercial Range,6,7290,7200,5,21600,900,3600,Bread,Beef,Cheese,
+354,57,Commercial Range,6,3660,3600,6,2400,270,180,Cream,Cheese,,
+348,58,Diner Stove,7,10800,7200,3,240,180,300,Cream,Sugar,,
+225,59,Deli Counter,21,21660,18000,8,7200,1400,32400,Cheese,Bacon,Green Pepper,
+225,60,Commercial Range,21,50400,28800,5,10800,2220,108000,Beef,Tomato Sauce,Onion,
+224,61,Diner Oven,13,9060,7200,8,300,450,18000,Flour,Cheese,Sugar,
+121,62,Chateau Stove,35,86400,79200,4,7200,2150,79200,Beef,Lobster,,
+121,63,Chateau Stove,33,10800,7200,6,14400,2850,108000,Beef,Garlic,,
+121,64,Commercial Oven,35,82805,79200,7,21600,3990,57600,Lobster,Cream,Egg,
+39,65,Chateau Oven,44,87600,57600,9,21600,5330,108000,Chicken,Mushroom,Onion,
+40,66,Chateau Stove,33,25320,18000,8,10800,3170,61200,Tomato,Green Pepper,Basil,Garlic
+38,67,Chateau Oven,44,28890,28800,8,3600,1800,14400,Onion,Bread,Cheese,
+248,68,Pizza Oven,19,210,120,6,360,180,7200,Bread,Tomato,Cheese,
+247,69,Pizza Oven,19,2160,1200,6,1800,650,28800,Dough,Chicken,Cheese,
+200,70,Pizza Oven,19,12900,7200,9,5400,1440,43200,Dough,Bacon,Beef,Chicken
+144,71,Pizza Oven,31,90900,57600,12,14400,4500,108000,Dough,Tomato Sauce,Green Pepper,Mushroom
+232,72,Pizza Oven,21,18900,14400,4,7200,1800,57600,Dough,Tomato Sauce,Garlic,
+16,73,Pizza Oven,47,29700,21600,10,3600,2300,36000,Dough,Strawberry,Cream,Apple
+387,74,Diner Stove,2,95,60,6,180,48,60,Bread,Egg,Cheese,
+326,75,Diner Stove,8,3750,3600,7,3600,300,300,Tomato,Cream,Bread,
+293,76,Diner Oven,13,10800,7200,7,10800,1100,10800,Flour,Beef,Carrot,
+308,77,Diner Stove,10,15635,14400,8,3600,600,43200,Egg,Bread,Potato,Chicken
+149,78,Deli Counter,23,25350,18000,13,10800,2000,12600,Bread,Beef,Tomato,Mayonnaise
+345,79,Commercial Range,6,3690,3600,6,1800,220,0,Bread,Cheese,Cream,
